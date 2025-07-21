@@ -51,9 +51,12 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(req).then(cached => {
       if (cached) {
-        // Background refresh
+        // Background refresh with single clone
         fetch(req).then(r2 => {
-          if (r2 && r2.ok) caches.open(APP_SHELL_CACHE).then(c => c.put(req, r2));
+          if (r2 && r2.ok) {
+            const cacheCopy = r2.clone();
+            caches.open(APP_SHELL_CACHE).then(c => c.put(req, cacheCopy));
+          }
         }).catch(()=>{});
         return cached;
       }
