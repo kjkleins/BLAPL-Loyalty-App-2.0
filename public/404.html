@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BLAPL Loyalty App</title>
+  <meta name="theme-color" content="#000000" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" href="./favicon/favicon.ico" />
+  <link rel="apple-touch-icon" href="./favicon/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <style>
+    body { margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,sans-serif; background:#000; color:#f5f5f5; display:flex; align-items:center; justify-content:center; min-height:100vh; }
+    .wrapper { max-width:520px; padding:2rem; text-align:center; }
+    h1 { font-size:1.4rem; margin:0 0 1rem; }
+    p { line-height:1.4; }
+    .hint { font-size:0.8rem; opacity:0.7; margin-top:1.5rem; }
+    a { color:#d50000; }
+  </style>
+  <script>
+    // Single Page App redirect fallback for GitHub Pages deep links
+    (function(){
+      const redirect = sessionStorage.getItem('redirect');
+      if (redirect) {
+        sessionStorage.removeItem('redirect');
+        const target = redirect.replace(/\/+$/, '');
+        if (target && target !== location.pathname) {
+          history.replaceState(null, '', target);
+        }
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div class="wrapper">
+    <h1>BLAPL Loyalty App</h1>
+    <p>This page is a fallback for direct deep links on GitHub Pages. The application shell should load automatically. If it does not, <a href="./">return to the home screen</a>.</p>
+    <p class="hint">404 fallback • SPA route rewrite emulation</p>
+  </div>
+</body>
+</html>

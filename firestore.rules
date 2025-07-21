@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isSelf(uid) { return request.auth != null && request.auth.uid == uid; }
+    function isAdmin() { return request.auth != null && request.auth.token.admin == true; }
+
+    // User profile
+    match /users/{uid} {
+      allow read: if signedIn();
+      allow create: if signedIn() && isSelf(uid);
+      allow update: if isSelf(uid) || isAdmin();
+      allow delete: if false; // no hard deletes via client
+    }
+
+    // Check-ins (soft delete planned Phase 2)
+    match /users/{uid}/checkIns/{checkInId} {
+      allow read: if isSelf(uid) || isAdmin();
+      allow create: if isSelf(uid);
+      allow update: if false; // disallow arbitrary edits
+      allow delete: if isAdmin();
+    }
+
+    // Coupons
+    match /users/{uid}/coupons/{couponId} {
+      allow read: if signedIn() && (isSelf(uid) || isAdmin());
+      allow create: if isSelf(uid) || isAdmin(); // via check-in transaction
+      // Redemption: only allow setting redeemedAt from null -> timestamp by owner or admin
+      allow update: if (isSelf(uid) || isAdmin())
+        && request.resource.data.keys().hasOnly(['createdAt', 'redeemedAt'])
+        && resource.data.redeemedAt == null
+        && request.resource.data.redeemedAt != null
+        && request.resource.data.createdAt == resource.data.createdAt;
+      allow delete: if isAdmin();
+    }
+
+    // Audit log (append-only, admin readable)
+    match /auditLog/{logId} {
+      allow create: if signedIn();
+      allow read: if signedIn() && isAdmin();
+      allow update, delete: if false;
+    }
+  }
+}
