@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/BLAPL-Loyalty-App-2.0/static/css/main.5273369f.css",
-    "main.js": "/BLAPL-Loyalty-App-2.0/static/js/main.db672db5.js",
+    "main.js": "/BLAPL-Loyalty-App-2.0/static/js/main.e099a19c.js",
     "index.html": "/BLAPL-Loyalty-App-2.0/index.html",
     "main.5273369f.css.map": "/BLAPL-Loyalty-App-2.0/static/css/main.5273369f.css.map",
-    "main.db672db5.js.map": "/BLAPL-Loyalty-App-2.0/static/js/main.db672db5.js.map"
+    "main.e099a19c.js.map": "/BLAPL-Loyalty-App-2.0/static/js/main.e099a19c.js.map"
   },
   "entrypoints": [
     "static/css/main.5273369f.css",
-    "static/js/main.db672db5.js"
+    "static/js/main.e099a19c.js"
   ]
 }
