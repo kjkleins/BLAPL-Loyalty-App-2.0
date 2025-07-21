@@ -38,10 +38,11 @@ self.addEventListener('fetch', (event) => {
   if (req.mode === 'navigate' || accept.includes('text/html')) {
     event.respondWith(
       fetch(req)
-        .then(r => {
-          const copy = r.clone();
-          caches.open(APP_SHELL_CACHE).then(c => c.put('index.html', copy));
-          return r;
+        .then(response => {
+          // Cache update: store the shell
+          const cacheCopy = response.clone();
+          caches.open(APP_SHELL_CACHE).then(cache => cache.put('index.html', cacheCopy));
+          return response;
         })
         .catch(() => caches.match('index.html'))
     );
@@ -60,9 +61,13 @@ self.addEventListener('fetch', (event) => {
         }).catch(()=>{});
         return cached;
       }
-      return fetch(req).then(r => {
-        if (r && r.ok) caches.open(APP_SHELL_CACHE).then(c => c.put(req, r.clone()));
-        return r;
+      return fetch(req).then(response => {
+        if (response && response.ok) {
+          const cacheCopy = response.clone();
+          caches.open(APP_SHELL_CACHE).then(cache => cache.put(req, cacheCopy));
+        }
+        return response;
+      )
       }).catch(() => {
         if (req.destination === 'document') return caches.match('index.html');
         return new Response('', { status: 503, statusText: 'Offline' });
